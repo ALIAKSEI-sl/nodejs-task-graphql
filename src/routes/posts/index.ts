@@ -51,8 +51,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
       const post = await fastify.db.posts.findOne({ key: 'id', equals: request.params.id });
       if (post === null) throw fastify.httpErrors.badRequest('Post not found');
 
-      await fastify.db.posts.delete(request.params.id);
-      return post;
+      const remotePost = await fastify.db.posts.delete(request.params.id);
+      return remotePost;
     }
   );
 
@@ -68,8 +68,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
         const post = await fastify.db.posts.findOne({key: 'id', equals: request.params.id});
         if (post === null) throw fastify.httpErrors.notFound('Post not found');
       
-        const changePost = await fastify.db.posts.change(request.params.id, request.body);
-        return changePost;
+        const editedPost = await fastify.db.posts.change(request.params.id, request.body);
+        return editedPost;
       } catch {
         throw fastify.httpErrors.badRequest();
       }

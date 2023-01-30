@@ -34,8 +34,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
         const memberType = await fastify.db.memberTypes.findOne({key: 'id', equals: request.params.id});
         if (memberType === null) throw fastify.httpErrors.badRequest('Member type not found');
       
-        const changeMemberType = fastify.db.memberTypes.change(request.params.id, request.body);
-        return changeMemberType;
+        const editedMemberType = fastify.db.memberTypes.change(request.params.id, request.body);
+        return editedMemberType;
       } catch {
         throw fastify.httpErrors.badRequest();
       }

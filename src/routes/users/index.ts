@@ -9,7 +9,8 @@ import type { UserEntity } from '../../utils/DB/entities/DBUsers';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> => {
   fastify.get('/', async function (request, reply): Promise<UserEntity[]> {
-    return await fastify.db.users.findMany();
+    const users = await fastify.db.users.findMany();
+    return users;
   });
 
   fastify.get('/:id',
@@ -51,12 +52,10 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
       const user = await fastify.db.users.findOne({ key: 'id', equals: request.params.id });
       if (user === null) throw fastify.httpErrors.badRequest('User not found');
 
-      const followers = await fastify.db.users.findMany({ key: 'subscribedToUserIds', inArray: request.params.id });
-
-      await Promise.all(followers.map(async follower => {
+      const following = await fastify.db.users.findMany({ key: 'subscribedToUserIds', inArray: request.params.id });
+      await Promise.all(following.map(async follower => {
         const indexUserDelete = follower.subscribedToUserIds.indexOf(request.params.id);
-        follower.subscribedToUserIds.slice(indexUserDelete, 1);
-
+        follower.subscribedToUserIds.splice(indexUserDelete, 1);
         await fastify.db.users.change(follower.id, { subscribedToUserIds: follower.subscribedToUserIds });
       }))
 
@@ -65,13 +64,12 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
       await Promise.all(posts.map(async post => {
         await fastify.db.posts.delete(post.id);
       }))
-      
-      const profiles = await fastify.db.profiles.findOne({ key: 'userId', equals: request.params.id });
-      if (profiles !== null) await fastify.db.profiles.delete(profiles.id);
 
-      fastify.db.users.delete(request.params.id);
-      
-      return user;
+      const profile = await fastify.db.profiles.findOne({ key: 'userId', equals: request.params.id });
+      if (profile !== null) await fastify.db.profiles.delete(profile.id);
+
+      const remoteUser = fastify.db.users.delete(request.params.id);
+      return remoteUser;
     }
   );
 
@@ -91,7 +89,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
       if (userAlreadySubscribeTo) return userSubscribeTo;
 
       const changeUser = await fastify.db.users.change(request.body.userId,
-        { subscribedToUserIds: user.subscribedToUserIds.concat(request.params.id) },
+        { subscribedToUserIds: userSubscribeTo.subscribedToUserIds.concat(request.params.id) },
       );
       return changeUser;
     }
@@ -112,10 +110,10 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
       const userUnsubscribeFromUser = userUnsubscribeFrom.subscribedToUserIds.includes(request.params.id);
       if (!userUnsubscribeFromUser) throw fastify.httpErrors.badRequest("You aren't following this user");
 
-      const indexUserSubscribe = userUnsubscribeFrom.subscribedToUserIds.indexOf(request.params.id);
-      userUnsubscribeFrom.subscribedToUserIds.splice(indexUserSubscribe, 1);
-      const changeUser = await fastify.db.users.change(request.body.userId, { subscribedToUserIds: userUnsubscribeFrom.subscribedToUserIds });
-      return changeUser;
+      const indexFollower = userUnsubscribeFrom.subscribedToUserIds.indexOf(request.params.id);
+      userUnsubscribeFrom.subscribedToUserIds.splice(indexFollower, 1);
+      const editedUser = await fastify.db.users.change(request.body.userId, { subscribedToUserIds: userUnsubscribeFrom.subscribedToUserIds });
+      return editedUser;
     }
   );
 
@@ -131,8 +129,8 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (fastify): Promise<void> 
         const user = await fastify.db.users.findOne({ key: 'id', equals: request.params.id });
         if (user === null) throw fastify.httpErrors.notFound('User not found');
 
-        const changeUser = await fastify.db.users.change(request.params.id, request.body);
-        return changeUser;
+        const editedUser = await fastify.db.users.change(request.params.id, request.body);
+        return editedUser;
       } catch {
         throw fastify.httpErrors.badRequest();
       }
