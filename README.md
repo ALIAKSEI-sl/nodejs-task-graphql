@@ -154,6 +154,20 @@ If the properties of the entity are not specified, then return the id of it.
    }  
    `
    2.9. Create profile.  
+   `
+   {
+    "profile": {
+      "avatar": "...",
+      "sex": "...",
+      "birthday": ...,
+      "country": "...",
+      "street": "....",
+      "city": "....",
+      "userId": "...",   
+      "memberTypeId": "..."
+      }
+   }
+   `
    2.10. Create post.  
    2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.  
    * Update gql requests:  
