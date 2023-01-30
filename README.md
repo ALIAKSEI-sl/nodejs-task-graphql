@@ -43,6 +43,38 @@ If the properties of the entity are not specified, then return the id of it.
     }
    }`
    2.2. Get user, profile, post, memberType by id - 4 operations in one query.  
+   `
+   {
+   user(id: "...") {
+      id
+      firstName
+      lastName
+      email
+   }
+   profile(id:  "...") {
+      id
+      avatar
+      sex
+      birthday
+      country
+      street
+      city
+      userId
+      memberTypeId
+   }
+   post(id:  "...") {
+      id
+      title
+      content
+      userId
+   }
+   memberType(id: "...") {
+      id
+      discount
+      monthPostsLimit
+   }
+   }
+   `
    2.3. Get users with their posts, profiles, memberTypes.  
    2.4. Get user by id with his posts, profile, memberType.  
    2.5. Get users with their `userSubscribedTo`, profile.  
