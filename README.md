@@ -144,6 +144,15 @@ If the properties of the entity are not specified, then return the id of it.
    2.7. Get users with their `userSubscribedTo`, `subscribedToUser` (additionally for each user in `userSubscribedTo`, `subscribedToUser` add their `userSubscribedTo`, `subscribedToUser`).  
    * Create gql requests:   
    2.8. Create user.  
+    `
+   {
+    "user": {
+        "firstName": "...",
+         "lastName": "...",
+         "email": "..."
+      }
+   }  
+   `
    2.9. Create profile.  
    2.10. Create post.  
    2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.  
