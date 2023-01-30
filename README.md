@@ -169,6 +169,11 @@ If the properties of the entity are not specified, then return the id of it.
    }
    `
    2.10. Create post.  
+   ```{
+    "title": "...",
+    "content": "...",
+    "userId": "..."
+   }`
    2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.  
    * Update gql requests:  
    2.12. Update user.  
