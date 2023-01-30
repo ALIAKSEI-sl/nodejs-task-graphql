@@ -1,4 +1,4 @@
-import {GraphQLID, GraphQLInt, GraphQLObjectType} from 'graphql';
+import { GraphQLID, GraphQLInt, GraphQLObjectType } from 'graphql';
 
 export const typeOfMemberType = new GraphQLObjectType({
   name: 'MemberType',
