@@ -9,6 +9,7 @@ import { createProfileConfig } from './profiles/createProfileConfig';
 import { updateProfileConfig } from './profiles/updateProfileConfig';
 import { createPostConfig } from './posts/createPostConfig';
 import { updatePostConfig } from './posts/updatePostConfig';
+import { updateMemberTypeConfig } from './member-types/updateMemberTypesConfig';
 
 export const graphqlBodySchema = {
   type: 'object',
@@ -67,6 +68,7 @@ export const graphqlMutationSchema = new GraphQLObjectType({
     createProfile: createProfileConfig,
     updateProfile: updateProfileConfig,
     createPost: createPostConfig,
-    updatePost: updatePostConfig
+    updatePost: updatePostConfig,
+    updateMemberType: updateMemberTypeConfig
   }
 });
