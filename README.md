@@ -12,16 +12,168 @@ If the properties of the entity are not specified, then return the id of it.
    
    * Get gql requests:  
    2.1. Get users, profiles, posts, memberTypes - 4 operations in one query.  
+   `{
+    users {
+      id
+      firstName
+      lastName
+      email
+    }
+    profiles {
+      id
+      avatar
+      sex
+      birthday
+      country
+      street
+      city
+      userId
+      memberTypeId
+    }
+    posts {
+      id
+      title
+      content
+      userId
+    }
+    memberTypes {
+      id
+      discount
+      monthPostsLimit
+    }
+   }`
    2.2. Get user, profile, post, memberType by id - 4 operations in one query.  
+   `
+   {
+   user(id: "...") {
+      id
+      firstName
+      lastName
+      email
+   }
+   profile(id:  "...") {
+      id
+      avatar
+      sex
+      birthday
+      country
+      street
+      city
+      userId
+      memberTypeId
+   }
+   post(id:  "...") {
+      id
+      title
+      content
+      userId
+   }
+   memberType(id: "...") {
+      id
+      discount
+      monthPostsLimit
+   }
+   }
+   `
    2.3. Get users with their posts, profiles, memberTypes.  
+   `
+      {
+      users {
+         id
+         firstName
+         lastName
+         email
+         posts {
+            id
+            title
+            content
+         }
+         memberType{
+            id
+            discount
+            monthPostsLimit
+         }
+         profile{
+            id
+            avatar
+            sex
+            birthday
+            country
+            street
+            city
+            userId
+            memberTypeId
+         }
+      }
+   }
+   `
    2.4. Get user by id with his posts, profile, memberType.  
+   ```
+      {
+      users(id: "...") {
+         id
+         firstName
+         lastName
+         email
+         posts {
+            id
+            title
+            content
+         }
+         memberType{
+            id
+            discount
+            monthPostsLimit
+         }
+         profile{
+            id
+            avatar
+            sex
+            birthday
+            country
+            street
+            city
+            userId
+            memberTypeId
+         }
+      }
+   }
+   ```
    2.5. Get users with their `userSubscribedTo`, profile.  
    2.6. Get user by id with his `subscribedToUser`, posts.  
    2.7. Get users with their `userSubscribedTo`, `subscribedToUser` (additionally for each user in `userSubscribedTo`, `subscribedToUser` add their `userSubscribedTo`, `subscribedToUser`).  
    * Create gql requests:   
    2.8. Create user.  
+    `
+   {
+    "user": {
+        "firstName": "...",
+         "lastName": "...",
+         "email": "..."
+      }
+   }  
+   `
    2.9. Create profile.  
+   `
+   {
+    "profile": {
+      "avatar": "...",
+      "sex": "...",
+      "birthday": ...,
+      "country": "...",
+      "street": "....",
+      "city": "....",
+      "userId": "...",   
+      "memberTypeId": "..."
+      }
+   }
+   `
    2.10. Create post.  
+   ```{
+    "title": "...",
+    "content": "...",
+    "userId": "..."
+   }`
    2.11. [InputObjectType](https://graphql.org/graphql-js/type/#graphqlinputobjecttype) for DTOs.  
    * Update gql requests:  
    2.12. Update user.  
